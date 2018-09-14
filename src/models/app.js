@@ -63,48 +63,35 @@ export default {
 
   },
   effects: {
-
     * query ({
       payload,
     }, { call, put, select }) {
-      const { success, user } = yield call(query, payload)
-      const { locationPathname } = yield select(_ => _.app)
-      if (success && user) {
-        const { list } = yield call(menusService.query)
-        const { permissions } = user
-        let menu = list
-        if (permissions.role === EnumRoleType.ADMIN || permissions.role === EnumRoleType.DEVELOPER) {
-          permissions.visit = list.map(item => item.id)
-        } else {
-          menu = list.filter((item) => {
-            const cases = [
-              permissions.visit.includes(item.id),
-              item.mpid ? permissions.visit.includes(item.mpid) || item.mpid === '-1' : true,
-              item.bpid ? permissions.visit.includes(item.bpid) : true,
-            ]
-            return cases.every(_ => _)
-          })
-        }
-        yield put({
-          type: 'updateState',
-          payload: {
-            user,
-            permissions,
-            menu,
-          },
-        })
-        if (location.pathname === '/login') {
-          yield put(routerRedux.push({
-            pathname: '/dashboard',
-          }))
-        }
-      } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
+      debugger;
+      if (location.pathname === '/login') {
+        yield put(routerRedux.push({
+          pathname: '/dashboard',
+        }))
+      }
+      var userJson = window.localStorage.getItem('loginUser')
+      if(!userJson){
         yield put(routerRedux.push({
           pathname: '/login',
           search: queryString.stringify({
             from: locationPathname,
           }),
         }))
+      }else{
+        let user = JSON.parse(userJson);
+        const { list } = yield call(menusService.query)
+        yield put({
+          type: 'updateState',
+          payload: {
+            user,
+            permissions: { visit: [] },
+            menu: list,
+          },
+        })
+        return list.every(_ => _)
       }
     },
 

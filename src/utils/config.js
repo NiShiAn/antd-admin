@@ -14,7 +14,7 @@ module.exports = {
   APIV1,
   APIV2,
   api: {
-    userLogin: `${APIV1}/user/login`,
+    userLogin: `http://localhost:58043/fr/user/login`,
     userLogout: `${APIV1}/user/logout`,
     userInfo: `${APIV1}/userInfo`,
     users: `${APIV1}/users`,

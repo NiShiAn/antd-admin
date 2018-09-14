@@ -32,7 +32,7 @@ const Login = ({
       </div>
       <form>
         <FormItem hasFeedback>
-          {getFieldDecorator('username', {
+          {getFieldDecorator('userName', {
             rules: [
               {
                 required: true,
@@ -41,7 +41,7 @@ const Login = ({
           })(<Input onPressEnter={handleOk} placeholder="Username" />)}
         </FormItem>
         <FormItem hasFeedback>
-          {getFieldDecorator('password', {
+          {getFieldDecorator('pass', {
             rules: [
               {
                 required: true,

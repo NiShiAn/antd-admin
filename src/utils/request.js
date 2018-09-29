@@ -40,7 +40,7 @@ const fetch = (options) => {
       jsonp(url, {
         param: `${qs.stringify(data)}&callback`,
         name: `jsonp_${new Date().getTime()}`,
-        timeout: 4000,
+        timeout: 40000,
       }, (error, result) => {
         if (error) {
           reject(error)

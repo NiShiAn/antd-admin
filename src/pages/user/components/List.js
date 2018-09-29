@@ -28,52 +28,29 @@ const List = ({
 
   const columns = [
     {
-      title: 'Avatar',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 64,
-      className: styles.avatar,
-      render: text => <img alt="avatar" width={24} src={text} />,
-    }, {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
-    }, {
-      title: 'NickName',
-      dataIndex: 'nickName',
-      key: 'nickName',
-    }, {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    }, {
-      title: 'Gender',
-      dataIndex: 'isMale',
-      key: 'isMale',
-      render: text => (<span>{text
-        ? 'Male'
-        : 'Female'}</span>),
-    }, {
-      title: 'Phone',
-      dataIndex: 'phone',
-      key: 'phone',
-    }, {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    }, {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    }, {
-      title: 'CreateTime',
-      dataIndex: 'createTime',
-      key: 'createTime',
-    }, {
-      title: 'Operation',
+      title: 'Id',
+      dataIndex: 'Idx',
+      key: 'Idx',
+    },
+    {
+      title: '账号',
+      dataIndex: 'Account',
+      key: 'Account',
+    },
+    {
+      title: '昵称',
+      dataIndex: 'UserName',
+      key: 'UserName',
+    },
+    {
+      title: '登录状态',
+      dataIndex: 'IsLogged',
+      key: 'IsLogged',
+      render: text => (<span>{text ? "是" : "否"}</span>)
+    },
+    {
+      title: '操作',
       key: 'operation',
-      width: 100,
       render: (text, record) => {
         return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
       },
@@ -92,11 +69,11 @@ const List = ({
     <Table
       {...tableProps}
       className={classnames(styles.table, { [styles.motion]: isMotion })}
-      bordered
-      scroll={{ x: 1250 }}
+      bordered = {true}
+      // scroll={{ x: 1250 }}
       columns={columns}
       simple
-      rowKey={record => record.id}
+      rowKey={record => record.idx}
       components={{
         body: { wrapper: isMotion ? AnimateBody : CommonBody },
       }}

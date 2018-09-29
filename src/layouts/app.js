@@ -53,7 +53,7 @@ const App = ({
       dispatch({ type: 'app/switchMenuPopver' })
     },
     logout () {
-      dispatch({ type: 'app/logout' })
+      dispatch({ type: 'app/logout', payload: user.Id })
     },
     switchSider () {
       dispatch({ type: 'app/switchSider' })

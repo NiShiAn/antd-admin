@@ -13,9 +13,8 @@ export default {
       const data = yield call(login, payload)
       const { locationQuery } = yield select(_ => _.app)
       if (data.success && data.IsSuccess) {
-        debugger;
         let { Data } = data;  
-        window.localStorage.setItem(`loginUser`, JSON.stringify({
+        window.localStorage.setItem('loginUser', JSON.stringify({
           Id: Data.Idx,
           Name: Data.UserName,
           Account: Data.Account

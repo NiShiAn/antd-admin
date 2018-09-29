@@ -37,15 +37,15 @@ export default modelExtend(pageModel, {
 
     * query ({ payload = {} }, { call, put }) {
       const data = yield call(query, payload)
-      if (data) {
+      if (data.IsSuccess) {
         yield put({
           type: 'querySuccess',
           payload: {
-            list: data.data,
+            list: data.Data,
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,
-              total: data.total,
+              total: 2,
             },
           },
         })

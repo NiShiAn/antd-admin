@@ -5,15 +5,22 @@ let database = [
   {
     id: '1',
     icon: 'dashboard',
-    name: 'Dashboard',
+    name: '首页',
     route: '/dashboard',
   },
   {
     id: '2',
     bpid: '1',
-    name: 'Users',
+    name: '用户管理',
     icon: 'user',
     route: '/user',
+  },
+  {
+    id: '3',
+    bpid: '1',
+    name: '异度之刃2',
+    icon: 'api',
+    route: '/xblade',
   },
   {
     id: '7',
@@ -29,13 +36,13 @@ let database = [
     name: 'User Detail',
     route: '/user/:id',
   },
-  {
-    id: '3',
-    bpid: '1',
-    name: 'Request',
-    icon: 'api',
-    route: '/request',
-  },
+  // {
+  //   id: '3',
+  //   bpid: '1',
+  //   name: 'Request',
+  //   icon: 'api',
+  //   route: '/request',
+  // },
   {
     id: '4',
     bpid: '1',

@@ -14,10 +14,10 @@ module.exports = {
   APIV1,
   APIV2,
   api: {
-    userLogin: `http://localhost:58043/fr/user/login`,
-    userLogout: `http://localhost:58043/fr/user/logout`,
+    userLogin: `http://localhost:58043/fr/admin/login`,
+    userLogout: `http://localhost:58043/fr/admin/logout`,
     userInfo: `${APIV1}/userInfo`,
-    users: `http://localhost:58043/fr/user/list`,
+    users: `http://localhost:58043/fr/admin/list`,
     posts: `${APIV1}/posts`,
     user: `${APIV1}/user/:id`,
     dashboard: `${APIV1}/dashboard`,
@@ -25,7 +25,7 @@ module.exports = {
     weather: `${APIV1}/weather`,
     v1test: `${APIV1}/test`,
     v2test: `${APIV2}/test`,
-    selectXblade: `http://localhost:58043/fr/xblade/list?name`
+    selectXblade: `http://localhost:58043/fr/xblade/list`
   },
   loginKey: 'loginUser'
 }

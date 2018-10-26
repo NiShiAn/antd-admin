@@ -73,7 +73,7 @@ const List = ({
       // scroll={{ x: 1250 }}
       columns={columns}
       simple
-      rowKey={record => record.idx}
+      rowKey={record => record.Idx}
       components={{
         body: { wrapper: isMotion ? AnimateBody : CommonBody },
       }}

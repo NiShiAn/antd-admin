@@ -10,7 +10,7 @@ export default modelExtend(pageModel,{
     setup ({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/xblade') {
-          const payload = { name: '', page: 1, pageSize: 10 }
+          const payload = location.query || { name: '', page: 1, pageSize: 10 }
           dispatch({
             type: 'select',
             payload,
@@ -28,11 +28,11 @@ export default modelExtend(pageModel,{
         yield put({
             type: 'querySuccess',
             payload: {
-              list: data.Data,
+              list: data.Data.List,
               pagination: {
                 current: Number(payload.page) || 1,
                 pageSize: Number(payload.pageSize) || 10,
-                total: 59,
+                total: data.Data.Total
               },
             },
         })

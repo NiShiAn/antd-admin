@@ -5,6 +5,7 @@ import { connect } from 'dva'
 import { Form, Input, Button, Row, Col, Table, Select, Divider, Modal } from 'antd'
 import { Page } from 'components'
 import queryString from 'query-string'
+import editModal from './components/editModal'
 import styles from './xblade.less'
 
 const { Search } = Input
@@ -21,10 +22,10 @@ const Xblade = ({
     }
 }) => {
     const { query, pathname } = location
-    var { list, pagination } = xblade
+    var { list, pagination, modalVisible } = xblade
 
-    //#region 表格属性
-
+    //#region 属性
+    //表格
     const columns = [{
         title: '御刃者/异刃',
         dataIndex: 'Name',
@@ -75,8 +76,18 @@ const Xblade = ({
                 </span>
             )
         },
-    }];
-
+    }]
+    //弹窗
+    const mPros = {
+        title: '修改',
+        visible: modalVisible,
+        confirmLoading: '',
+        maskClosable: false,
+        wrapClassName: 'vertical-center-modal',
+        onCancel(){
+            dispatch({ type: 'xblade/hideModal' })
+        }
+    }
     //#endregion
    
     //#region function
@@ -92,21 +103,15 @@ const Xblade = ({
               page: page
             })
         }))
-    };
-    const runSearch = () => pagination.onChange();
+    }
+    const runSearch = () => pagination.onChange()
 
     //编辑
     const editInfo = (info) => {
-        Modal.info({
-            title: 'This is' + info.Name,
-            content: (
-            <div>
-                <p>some messages...some messages...</p>
-                <p>some messages...some messages...</p>
-            </div>
-            ),
-            onOk() {},
-        });
+        dispatch({
+            type: 'xblade/showModal',
+            payload: { ...info }
+        })
     }
     //#endregion
     return (
@@ -139,6 +144,7 @@ const Xblade = ({
                 rowKey={record => record.Xid}
                 loading={loading.effects['xblade/select']}
                 pagination={pagination}/>
+            <editModal />
         </Page>
     )
 }

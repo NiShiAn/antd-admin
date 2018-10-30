@@ -5,7 +5,9 @@ import { pageModel } from 'utils/model'
 
 export default modelExtend(pageModel,{
   namespace: 'xblade',
-  state: {},
+  state: {
+    modalVisible: false
+  },
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen((location) => {
@@ -41,5 +43,12 @@ export default modelExtend(pageModel,{
       }
     },
   },
-
+  reducers: {
+    showModal(state, {payload}){
+      return { ...state, ...payload, modalVisible: true }
+    },
+    hideModal(state){
+      return { ...state, modalVisible: false }
+    }
+  }
 })

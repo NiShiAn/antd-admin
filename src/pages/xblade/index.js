@@ -5,7 +5,7 @@ import { connect } from 'dva'
 import { Form, Input, Button, Row, Col, Table, Select, Divider, Modal } from 'antd'
 import { Page } from 'components'
 import queryString from 'query-string'
-import editModal from './components/editModal'
+import EditModal from './components/EditModal'
 import styles from './xblade.less'
 
 const { Search } = Input
@@ -22,7 +22,7 @@ const Xblade = ({
     }
 }) => {
     const { query, pathname } = location
-    var { list, pagination, modalVisible } = xblade
+    var { list, pagination, editVisible, edit } = xblade
 
     //#region 属性
     //表格
@@ -50,7 +50,7 @@ const Xblade = ({
         dataIndex: 'Equipment',
         key: 'Equipment',
         render: (text) => {
-            return text.split(',').map((n, i) => (<p key={i}>{n}</p>))
+            return text.split(',').map((n, i) => (<div key={i}>{n}</div>))
         }
     }, {
         title: '晶片',
@@ -61,7 +61,7 @@ const Xblade = ({
         dataIndex: 'Favorite',
         key: 'Favorite',
         render: (text) => {
-            return text.split(',').map((n, i) => (<p key={i}>{n}</p>))
+            return text.split(',').map((n, i) => (<div key={i}>{n}</div>))
         }
     },{
         title: '操作',
@@ -80,8 +80,9 @@ const Xblade = ({
     //弹窗
     const mPros = {
         title: '修改',
-        visible: modalVisible,
-        confirmLoading: '',
+        info: edit,
+        visible: editVisible,
+        //confirmLoading: true,
         maskClosable: false,
         wrapClassName: 'vertical-center-modal',
         onCancel(){
@@ -108,9 +109,11 @@ const Xblade = ({
 
     //编辑
     const editInfo = (info) => {
-        dispatch({
+        dispatch({ 
             type: 'xblade/showModal',
-            payload: { ...info }
+            payload:{
+                edit: info
+            }
         })
     }
     //#endregion
@@ -144,7 +147,7 @@ const Xblade = ({
                 rowKey={record => record.Xid}
                 loading={loading.effects['xblade/select']}
                 pagination={pagination}/>
-            <editModal />
+            { editVisible && <EditModal {...mPros} /> }
         </Page>
     )
 }

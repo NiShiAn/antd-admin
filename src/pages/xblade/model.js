@@ -6,7 +6,8 @@ import { pageModel } from 'utils/model'
 export default modelExtend(pageModel,{
   namespace: 'xblade',
   state: {
-    modalVisible: false
+    editVisible: false,
+    edit: {}
   },
   subscriptions: {
     setup ({ dispatch, history }) {
@@ -44,11 +45,11 @@ export default modelExtend(pageModel,{
     },
   },
   reducers: {
-    showModal(state, {payload}){
-      return { ...state, ...payload, modalVisible: true }
+    showModal(state, { payload }){
+      return { ...state, ...payload, editVisible: true }
     },
     hideModal(state){
-      return { ...state, modalVisible: false }
+      return { ...state, editVisible: false }
     }
   }
 })

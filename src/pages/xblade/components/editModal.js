@@ -6,13 +6,11 @@ const editModal = ({
     form: {
         getFieldDecorator,
         validateFields,
-        getFieldsValue    
+        getFieldsValue
     },
     ...mPros
 }) => {
     const { info } = mPros;
-    var fetter = info.Fetter.split('/').length > 1 ? info.Fetter.split('/')[1] : ""
-    var target = info.Fetter.split('/')[0]
     const formItemLayout = {
         labelCol: {
           span: 4,
@@ -29,7 +27,8 @@ const editModal = ({
               <Col span={3}>
                 <Form.Item>
                   {getFieldDecorator('Fetter',{
-                    initialValue: fetter
+                    initialValue: info.Fetter,
+                    rules: [{ required: true, message: '必填' }]
                   })(<Input />)}
                 </Form.Item> 
               </Col>
@@ -39,7 +38,7 @@ const editModal = ({
               <Col span={3}>
                 <Form.Item>
                   {getFieldDecorator('Target',{
-                    initialValue: target,
+                    initialValue: info.Target,
                     rules: [{ required: true, message: '必填' }]
                   })(<Input />)}
                 </Form.Item>

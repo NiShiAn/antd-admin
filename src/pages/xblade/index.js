@@ -42,15 +42,17 @@ const Xblade = ({
         title: '羁绊',
         dataIndex: 'Fetter',
         key: 'Fetter',
-        render: (text) => {
-            return <span>{text.split('/').length > 1 && text.split('/')[1] != "" ? text : text.split('/')[0]}</span>
+        render: (text, record) => {
+            if(record.Target != "")
+                return (<span>{record.Fetter}/{record.Target}</span>)
+            return (<span>{record.Fetter}</span>)
         }
     }, {
         title: '饰品/辅助核心',
-        dataIndex: 'Equipment',
-        key: 'Equipment',
+        dataIndex: 'Subs',
+        key: 'Subs',
         render: (text) => {
-            return text.split(',').map((n, i) => (<div key={i}>{n}</div>))
+            return text.map((n) => (<div key={n.Idx}>{n.Equib}</div>))
         }
     }, {
         title: '晶片',
@@ -68,13 +70,9 @@ const Xblade = ({
         key: 'operation',
         className: 'operate',
         render: (text, record) => {
-            return (
-                <span>
-                    <a href="javascript:;" onClick={editInfo.bind(this, record)}>编辑</a>
-                    <Divider type="vertical" />
-                    <a href="javascript:;">删除</a>
-                </span>
-            )
+            if(record.Target != "" || record.Subs.length > 0 || record.Wafer != "")
+                return (<a href="javascript:;" onClick={editInfo.bind(this, record)}>编辑</a>)
+            //return (<span></span>)
         },
     }]
     //弹窗

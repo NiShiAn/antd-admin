@@ -1,56 +1,78 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Col, Form, Input, Modal } from 'antd'
+import { Col, Form, Input, Checkbox, Modal } from 'antd'
+import styles from '../less/editModal.less'
 
 const editModal = ({
-    form: {
-        getFieldDecorator,
-        validateFields,
-        getFieldsValue
-    },
-    ...mPros
+  form: {
+    getFieldDecorator,
+    validateFields,
+    getFieldsValue
+  },
+  ...mPros
 }) => {
-    const { info } = mPros;
-    const formItemLayout = {
-        labelCol: {
-          span: 4,
-        },
-        wrapperCol: {
-          span: 20,
-        },
-    }
+  const { info } = mPros;
+  const options = info.Subs.filter(n => n.Genrn != "晶片")
+  const checkes = info.Subs.filter(n => n.Genrn != "晶片" && n.IsReach).map(n => n.Equib)
+  const wafer = info.Subs.filter(n => n.Genrn == "晶片")[0]
+  const formItemLayout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 20 },
+  }
       
-    return (
-        <Modal {...mPros}>
-          <Form layout="horizontal">
-            <Form.Item label="羁绊" hasFeedback {...formItemLayout}>
-              <Col span={3}>
-                <Form.Item>
-                  {getFieldDecorator('Fetter',{
-                    initialValue: info.Fetter,
-                    rules: [{ required: true, message: '必填' }]
-                  })(<Input />)}
-                </Form.Item> 
-              </Col>
-              <Col span={1}>
-                <span style={{ display: 'inline-block' , width: '100%', textAlign: 'center' }}>/</span>
-              </Col>
-              <Col span={3}>
-                <Form.Item>
-                  {getFieldDecorator('Target',{
-                    initialValue: info.Target,
-                    rules: [{ required: true, message: '必填' }]
-                  })(<Input />)}
-                </Form.Item>
-              </Col> 
-            </Form.Item>
-          </Form>
-        </Modal>
-    )
+  return (
+    <Modal {...mPros}>
+      <Form layout="horizontal">
+        { info.Target != "" &&
+          <Form.Item label="羁绊" {...formItemLayout}>
+            <Col span={3}>
+              <Form.Item>
+                {getFieldDecorator('Fetter',{
+                  initialValue: info.Fetter,
+                  rules: [{ required: true, message: '必填' }]
+                })(<Input />)}
+              </Form.Item> 
+            </Col>
+            <Col span={1}>
+              <span style={{ display: 'inline-block' , width: '100%', textAlign: 'center' }}>/</span>
+            </Col>
+            <Col span={3}>
+              <Form.Item>
+                {getFieldDecorator('Target',{
+                  initialValue: info.Target,
+                  rules: [{ required: true, message: '必填' }]
+                })(<Input />)}
+              </Form.Item>
+            </Col> 
+          </Form.Item>
+        }
+        {
+          options.length > 0 &&
+          <Form.Item label={options[0].Genrn} {...formItemLayout}>
+            {getFieldDecorator('Subs',{
+              initialValue: checkes,
+              rules: [{ type: 'array' }]
+            })(<Checkbox.CheckboxGroup>
+              {options.map(n => (<div key={n.Idx}><Checkbox value={n.Idx}>{n.Equib}</Checkbox></div>))}
+            </Checkbox.CheckboxGroup>)}
+          </Form.Item>
+        }
+        {
+          wafer &&
+          <Form.Item label="晶片" {...formItemLayout}>
+            {getFieldDecorator('Wafer', {
+              initialValue: wafer.IsReach,
+              rules: [{ type: 'boolean' }]
+            })(<Checkbox value={wafer.Idx}>{wafer.Equib}</Checkbox>)}
+          </Form.Item>
+        }
+      </Form>
+    </Modal>
+  )
 }
 
 editModal.propTypes = {
-    form: PropTypes.object.isRequired
+  form: PropTypes.object.isRequired
 }
 
 export default Form.create()(editModal)

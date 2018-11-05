@@ -51,16 +51,17 @@ const editModal = ({
           <Form.Item label={options[0].Genrn} {...formItemLayout}>
             {getFieldDecorator('Subs',{
               initialValue: checkes,
-              rules: [{ type: 'array' }]
-            })(<Checkbox.CheckboxGroup>
+              //rules: [{ type: 'array' }]
+            })(<Checkbox.Group>
               {options.map(n => (<div key={n.Idx}><Checkbox value={n.Idx}>{n.Equib}</Checkbox></div>))}
-            </Checkbox.CheckboxGroup>)}
+            </Checkbox.Group>)}
           </Form.Item>
         }
         {
           wafer &&
           <Form.Item label="晶片" {...formItemLayout}>
             {getFieldDecorator('Wafer', {
+              valuePropName: 'checked',
               initialValue: wafer.IsReach,
               rules: [{ type: 'boolean' }]
             })(<Checkbox value={wafer.Idx}>{wafer.Equib}</Checkbox>)}

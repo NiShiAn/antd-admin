@@ -25,7 +25,8 @@ module.exports = {
     weather: `${APIV1}/weather`,
     v1test: `${APIV1}/test`,
     v2test: `${APIV2}/test`,
-    selectXblade: `http://localhost:58043/fr/xblade/list`
+    selectXblade: `http://localhost:58043/fr/xblade/list`,
+    updateXblade: `http://localhost:58043/fr/xblade/update`
   },
   loginKey: 'loginUser'
 }

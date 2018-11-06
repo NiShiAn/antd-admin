@@ -11,20 +11,35 @@ const editModal = ({
   },
   ...mPros
 }) => {
-  const { info } = mPros;
-  const options = info.Subs.filter(n => n.Genrn != "晶片")
-  const checkes = info.Subs.filter(n => n.Genrn != "晶片" && n.IsReach).map(n => n.Equib)
-  const wafer = info.Subs.filter(n => n.Genrn == "晶片")[0]
+  const { info, onOk } = mPros
+  const options = info.Subs.filter(n => n.Genrn != '晶片')
+  const checkes = info.Subs.filter(n => n.Genrn != '晶片' && n.IsReach).map(n => n.Idx)
+  const wafer = info.Subs.filter(n => n.Genrn == '晶片')[0]
   const formItemLayout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
   }
-      
+  mPros.title = `【${info.Name}】修改`
+  mPros.onOk = () => {
+    validateFields((errors) => {
+      if (errors) return
+
+      let datas = getFieldsValue()
+      datas.Subs = datas.Subs || []
+  
+      onOk({
+        xid: info.Xid,
+        fetter: datas.Fetter || '',
+        target: datas.Target || '',
+        subs: datas.Subs.join() + (datas.Wafer != null && datas.Wafer ? `,${wafer.Idx}` : '')
+      })
+    })
+  }
   return (
     <Modal {...mPros}>
-      <Form layout="horizontal">
-        { info.Target != "" &&
-          <Form.Item label="羁绊" {...formItemLayout}>
+      <Form layout='horizontal'>
+        { info.Target != '' &&
+          <Form.Item label='羁绊' {...formItemLayout}>
             <Col span={3}>
               <Form.Item>
                 {getFieldDecorator('Fetter',{
@@ -59,7 +74,7 @@ const editModal = ({
         }
         {
           wafer &&
-          <Form.Item label="晶片" {...formItemLayout}>
+          <Form.Item label='晶片' {...formItemLayout}>
             {getFieldDecorator('Wafer', {
               valuePropName: 'checked',
               initialValue: wafer.IsReach,

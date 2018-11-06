@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { selectList } from './service'
+import { selectList, update } from './service'
 import { pageModel } from 'utils/model'
 
 export default modelExtend(pageModel,{
@@ -25,7 +25,7 @@ export default modelExtend(pageModel,{
   effects: {
     * select ({
       payload
-    }, { put, call, select }) {
+    }, { put, call }) {
       const data = yield call(selectList, payload)
       if (data.success && data.IsSuccess) {
         yield put({
@@ -43,6 +43,14 @@ export default modelExtend(pageModel,{
         throw data
       }
     },
+    * update({ payload },{ select, call, put }){
+      const data = yield call(update, payload)
+      if (data.success && data.IsSuccess) {
+        yield put({ type: 'hideModal' })
+      } else {
+        throw data
+      }
+    }
   },
   reducers: {
     showModal(state, { payload }){

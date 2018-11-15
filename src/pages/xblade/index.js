@@ -65,10 +65,10 @@ const Xblade = ({
     }
   }, {
     title: '喜好物品',
-    dataIndex: 'Favorite',
-    key: 'Favorite',
+    dataIndex: 'Favorites',
+    key: 'Favorites',
     render: (text) => {
-      return text.split(',').map((n, i) => (<div key={i}>{n}</div>))
+      return text.map(n => (<a key={n.GoodsId} href='javascript:;' style={{ display: "block" }}>{n.Name}</a>))
     }
   },{
     title: '操作',

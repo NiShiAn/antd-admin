@@ -6,8 +6,10 @@ import { pageModel } from 'utils/model'
 export default modelExtend(pageModel,{
   namespace: 'xblade',
   state: {
-    editVisible: false,
-    edit: {}
+    editShow: false,
+    editBox: {},
+    favesShow: false,
+    favesBox: {}
   },
   subscriptions: {
     setup ({ dispatch, history }) {
@@ -54,10 +56,16 @@ export default modelExtend(pageModel,{
   },
   reducers: {
     showModal(state, { payload }){
-      return { ...state, ...payload, editVisible: true }
+      return { ...state, ...payload, editShow: true }
     },
     hideModal(state){
-      return { ...state, editVisible: false }
-    }
+      return { ...state, editShow: false }
+    },
+    showFaves(state, { payload }){
+      return{ ...state, ...payload, favesShow: true }
+    },
+    hideFaves(state){
+      return { ...state, favesShow: false }
+    },
   }
 })

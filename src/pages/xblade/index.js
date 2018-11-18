@@ -6,6 +6,7 @@ import { Form, Input, Button, Row, Col, Table, Select, Divider, Modal } from 'an
 import { Page } from 'components'
 import queryString from 'query-string'
 import EditModal from './components/EditModal'
+import FavesDrawer from './components/FavesDrawer'
 
 const { Search } = Input
 
@@ -21,7 +22,7 @@ const Xblade = ({
   }
 }) => {
   const { query, pathname } = location
-  const { list, pagination, editVisible, edit } = xblade
+  const { list, pagination, editShow, editBox, favesShow, favesBox } = xblade
 
   //#region 属性
   //表格
@@ -68,7 +69,7 @@ const Xblade = ({
     dataIndex: 'Favorites',
     key: 'Favorites',
     render: (text) => {
-      return text.map(n => (<a key={n.GoodsId} href='javascript:;' style={{ display: "block" }}>{n.Name}</a>))
+      return text.map(n => (<a key={n.GoodsId} href='javascript:;' onClick={favesInfo.bind(this, n)} style={{ display: "block" }}>{n.Name}</a>))
     }
   },{
     title: '操作',
@@ -82,12 +83,12 @@ const Xblade = ({
   }]
   //弹窗
   const mPros = {
-    info: edit,
-    visible: editVisible,
+    info: editBox,
+    visible: editShow,
     //confirmLoading: loading.effects['xblade/update'],
     maskClosable: false,
     wrapClassName: 'vertical-center-modal',
-    onOk(data){
+    onOk(data) {
       console.log(data)
       dispatch({
         type: 'xblade/update',
@@ -96,8 +97,16 @@ const Xblade = ({
         runSearch()
       })
     },
-    onCancel(){
+    onCancel() {
       dispatch({ type: 'xblade/hideModal' })
+    }
+  }
+  //抽屉
+  const dPros = {
+    info: favesBox,
+    visible: favesShow,
+    onClose() {
+      dispatch({ type: 'xblade/hideFaves' })
     }
   }
   //#endregion
@@ -122,7 +131,17 @@ const Xblade = ({
     dispatch({ 
       type: 'xblade/showModal',
       payload:{
-        edit: info
+        editBox: info
+      }
+    })
+  }
+
+  //详情
+  const favesInfo = (info) => {
+    dispatch({
+      type: 'xblade/showFaves',
+      payload:{
+        favesBox: info
       }
     })
   }
@@ -160,7 +179,8 @@ const Xblade = ({
         loading={loading.effects['xblade/select']}
         pagination={pagination}
       />
-      { editVisible && <EditModal {...mPros} /> }
+      { editShow && <EditModal {...mPros} /> }
+      { favesShow && <FavesDrawer {...dPros} /> }
     </Page>
   )
 }

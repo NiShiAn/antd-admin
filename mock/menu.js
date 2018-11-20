@@ -13,7 +13,7 @@ let database = [
     bpid: '1',
     name: '用户管理',
     icon: 'user',
-    route: '/user',
+    route: '/admin',
   },
   {
     id: '3',

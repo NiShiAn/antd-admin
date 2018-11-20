@@ -14,6 +14,9 @@ module.exports = {
   APIV1,
   APIV2,
   api: {
+    admin:{
+      select: `http://localhost:58043/fr/admin/list`
+    },
     userLogin: `http://localhost:58043/fr/admin/login`,
     userLogout: `http://localhost:58043/fr/admin/logout`,
     userInfo: `${APIV1}/userInfo`,

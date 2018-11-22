@@ -7,6 +7,7 @@ import { routerRedux } from 'dva/router'
 import { parse } from 'qs'
 import config from 'config'
 import { EnumRoleType } from 'enums'
+import { isNeedLogin } from 'utils'
 import { logout } from 'services/app'
 import * as menusService from 'services/menus'
 import queryString from 'query-string'
@@ -20,14 +21,14 @@ export default {
     permissions: {
       visit: [],
     },
-    menu: [
-      {
-        id: 1,
-        icon: 'laptop',
-        name: 'Dashboard',
-        router: '/dashboard',
-      },
-    ],
+    menu: [{
+      Id: 1,
+      Name: '首页',
+      Icon: 'laptop',
+      Route: '/dashboard',
+      Level: 1,
+      ParentId: 0
+    }],
     menuPopoverVisible: false,
     siderFold: window.localStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: window.localStorage.getItem(`${prefix}darkTheme`) === 'true',
@@ -37,7 +38,6 @@ export default {
     locationQuery: {},
   },
   subscriptions: {
-
     setupHistory ({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
@@ -49,7 +49,6 @@ export default {
         })
       })
     },
-
     setup ({ dispatch }) {
       dispatch({ type: 'query' })
       let tid
@@ -69,8 +68,7 @@ export default {
       var userJson = window.localStorage.getItem('loginUser')
       const { locationPathname } = yield select(_ => _.app)
 
-      if (userJson && userJson.length > 0) {
-        const { list } = yield call(menusService.query)
+      if (!isNeedLogin(userJson)) {
         const user = JSON.parse(userJson);
 
         yield put({
@@ -78,9 +76,9 @@ export default {
           payload: {
             user,
             permissions: {
-              visit: list.map(item => item.id)
+              visit: user.Menus.map(item => item.id)
             },
-            menu: list,
+            menu: user.Menus,
           },
         })
         if (location.pathname === '/login') {
@@ -89,6 +87,7 @@ export default {
           }))
         }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
+        window.localStorage.removeItem('loginUser')
         yield put(routerRedux.push({
           pathname: '/login',
           search: queryString.stringify({
@@ -102,23 +101,24 @@ export default {
     }, { call, put }) {
       const data = yield call(logout, { id: payload })
       if (data.success) {
-        window.localStorage.removeItem('loginUser');
+        window.localStorage.removeItem('loginUser')
         yield put({ type: 'updateState', payload: {
           user: {},
           permissions: { visit: [] },
           menu: [{
-              id: 1,
-              icon: 'laptop',
-              name: 'Dashboard',
-              router: '/dashboard',
-            }],
+            Id: 1,
+            Name: '首页',
+            Icon: 'laptop',
+            Route: '/dashboard',
+            Level: 1,
+            ParentId: 0
+          }],
         }})
         yield put({ type: 'query' })
       } else {
         throw (data)
       }
     },
-
     * changeNavbar (action, { put, select }) {
       const { app } = yield (select(_ => _))
       const isNavbar = document.body.clientWidth < 769
@@ -126,51 +126,27 @@ export default {
         yield put({ type: 'handleNavbar', payload: isNavbar })
       }
     },
-
   },
   reducers: {
     updateState (state, { payload }) {
-      return {
-        ...state,
-        ...payload,
-      }
+      return { ...state, ...payload }
     },
-
     switchSider (state) {
       window.localStorage.setItem(`${prefix}siderFold`, !state.siderFold)
-      return {
-        ...state,
-        siderFold: !state.siderFold,
-      }
+      return { ...state, siderFold: !state.siderFold }
     },
-
     switchTheme (state) {
       window.localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme)
-      return {
-        ...state,
-        darkTheme: !state.darkTheme,
-      }
+      return { ...state, darkTheme: !state.darkTheme }
     },
-
     switchMenuPopver (state) {
-      return {
-        ...state,
-        menuPopoverVisible: !state.menuPopoverVisible,
-      }
+      return { ...state, menuPopoverVisible: !state.menuPopoverVisible }
     },
-
     handleNavbar (state, { payload }) {
-      return {
-        ...state,
-        isNavbar: payload,
-      }
+      return { ...state, isNavbar: payload }
     },
-
     handleNavOpenKeys (state, { payload: navOpenKeys }) {
-      return {
-        ...state,
-        ...navOpenKeys,
-      }
-    },
-  },
+      return { ...state, ...navOpenKeys }
+    }
+  }
 }

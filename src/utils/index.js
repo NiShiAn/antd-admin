@@ -55,7 +55,7 @@ export function queryURL (name) {
 
 /**
  * 数组内查询
- * @param   {array}      array
+ * @param   {array}     array
  * @param   {String}    id
  * @param   {String}    keyAlias
  * @return  {Array}
@@ -97,4 +97,23 @@ export function arrayToTree (array, id = 'id', pid = 'pid', children = 'children
     }
   })
   return result
+}
+/**
+ * 获取限制时间
+ * @param   {int}     h
+ * @return  {int}
+ */
+export function getLimitTime(h = 3){
+  return (new Date()).getTime() + h*60*60*1000;
+}
+/**
+ * 判断是否需要登录
+ * @param   {string}  info
+ * @return  {boolean}
+ */
+export function isNeedLogin(info){
+  if(!info || info.length <= 0) 
+    return true
+
+  return JSON.parse(info).Limit < new Date().getTime()
 }

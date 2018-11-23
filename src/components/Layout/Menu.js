@@ -13,33 +13,33 @@ const Menus = ({
   siderFold, darkTheme, navOpenKeys, changeOpenKeys, menu, location,
 }) => {
   // 生成树状
-  const menuTree = arrayToTree(menu.filter(_ => _.mpid !== '-1'), 'id', 'mpid')
+  const menuTree = arrayToTree(menu, 'Id', 'ParentId')
   const levelMap = {}
 
   // 递归生成菜单
   const getMenus = (menuTreeN, siderFoldN) => {
     return menuTreeN.map((item) => {
-      if (item.children) {
-        if (item.mpid) {
-          levelMap[item.id] = item.mpid
+      if (item.Children) {
+        if (item.ParentId) {
+          levelMap[item.Id] = item.ParentId
         }
         return (
           <SubMenu
-            key={item.id}
+            key={item.Id}
             title={<span>
-              {item.icon && <Icon type={item.icon} />}
-              {(!siderFoldN || !menuTree.includes(item)) && item.name}
+              {item.Icon && <Icon type={item.Icon} />}
+              {(!siderFoldN || !menuTree.includes(item)) && item.Name}
             </span>}
           >
-            {getMenus(item.children, siderFoldN)}
+            {getMenus(item.Children, siderFoldN)}
           </SubMenu>
         )
       }
       return (
-        <Menu.Item key={item.id}>
-          <Link to={item.route || '#'} style={siderFoldN ? { width: 10 } : {}}>
-            {item.icon && <Icon type={item.icon} />}
-            {item.name}
+        <Menu.Item key={item.Id}>
+          <Link to={item.Route || '#'} style={siderFoldN ? { width: 10 } : {}}>
+            {item.Icon && <Icon type={item.Icon} />}
+            {item.Name}
           </Link>
         </Menu.Item>
       )
@@ -89,8 +89,8 @@ const Menus = ({
   let currentMenu
   let defaultSelectedKeys
   for (let item of menu) {
-    if (item.route && pathToRegexp(item.route).exec(location.pathname)) {
-      if (!navOpenKeys.length && item.mpid && !openKeysFlag) changeOpenKeys([String(item.mpid)])
+    if (item.Route && pathToRegexp(item.Route).exec(location.pathname)) {
+      if (!navOpenKeys.length && item.ParentId && !openKeysFlag) changeOpenKeys([String(item.ParentId)])
       currentMenu = item
       break
     }
@@ -99,10 +99,8 @@ const Menus = ({
     let result = [String(current[id])]
     const getPath = (item) => {
       if (item && item[pid]) {
-        if (item[pid] === '-1') {
-          result.unshift(String(item['bpid']))
-        } else {
-          result.unshift(String(item[pid]))
+        result.unshift(String(item[pid]))
+        if (item[pid] !== '-1') {
           getPath(queryArray(array, item[pid], id))
         }
       }
@@ -111,7 +109,7 @@ const Menus = ({
     return result
   }
   if (currentMenu) {
-    defaultSelectedKeys = getPathArray(menu, currentMenu, 'mpid', 'id')
+    defaultSelectedKeys = getPathArray(menu, currentMenu, 'ParentId', 'Id')
   }
 
   if (!defaultSelectedKeys) {

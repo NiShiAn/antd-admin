@@ -29,7 +29,7 @@ const App = ({
   let { pathname } = location
   pathname = pathname.startsWith('/') ? pathname : `/${pathname}`
   const { iconFontJS, iconFontCSS, logo } = config
-  const current = menu.filter(item => pathToRegexp(item.route || '').exec(pathname))
+  const current = menu.filter(item => pathToRegexp(item.Route || '').exec(pathname))
   const hasPermission = current.length ? permissions.visit.includes(current[0].id) : false
   const { href } = window.location
 

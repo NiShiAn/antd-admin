@@ -79,7 +79,7 @@ export function queryArray (array, key, keyAlias = 'key') {
  * @param   {String}    children
  * @return  {Array}
  */
-export function arrayToTree (array, id = 'id', pid = 'pid', children = 'children') {
+export function arrayToTree (array, id = 'Id', pid = 'ParentId', children = 'Children') {
   let data = cloneDeep(array)
   let result = []
   let hash = {}

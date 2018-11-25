@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import { DropOption } from 'components'
-import { Row, Col, Button, Table } from 'antd'
+import { Row, Col, Button, Table, Divider } from 'antd'
 import { Page } from 'components'
 import queryString from 'query-string'
 
@@ -44,7 +44,13 @@ const Admin = ({
       title: '操作',
       key: 'operation',
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
+        return (
+          <span>
+            <a href="javascript:;">编辑</a>
+            <Divider type="vertical" />
+            <a href="javascript:;">删除</a>
+          </span>
+        )
       },
     },
   ]

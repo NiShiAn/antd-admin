@@ -90,9 +90,7 @@ export default {
         window.localStorage.removeItem('loginUser')
         yield put(routerRedux.push({
           pathname: '/login',
-          search: queryString.stringify({
-            from: locationPathname,
-          }),
+          search: queryString.stringify({ from: locationPathname })
         }))
       }
     },
@@ -114,7 +112,7 @@ export default {
             ParentId: 0
           }],
         }})
-        yield put({ type: 'query' })
+        yield put(routerRedux.push({ pathname: '/login' }))
       } else {
         throw (data)
       }

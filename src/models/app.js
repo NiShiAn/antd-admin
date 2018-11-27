@@ -4,15 +4,11 @@
 /* eslint no-restricted-globals: ["error", "event"] */
 
 import { routerRedux } from 'dva/router'
-import { parse } from 'qs'
 import config from 'config'
-import { EnumRoleType } from 'enums'
-import { isNeedLogin } from 'utils'
 import { logout } from 'services/app'
-import * as menusService from 'services/menus'
 import queryString from 'query-string'
 
-const { prefix } = config
+const { prefix, loginKey } = config
 
 export default {
   namespace: 'app',
@@ -58,17 +54,14 @@ export default {
           dispatch({ type: 'changeNavbar' })
         }, 300)
       }
-    },
-
+    }
   },
   effects: {
-    * query ({
-      payload,
-    }, { call, put, select }) {
-      var userJson = window.localStorage.getItem('loginUser')
+    * query (action, { put, select }) {
+      var userJson = window.sessionStorage.getItem(loginKey)
       const { locationPathname } = yield select(_ => _.app)
 
-      if (!isNeedLogin(userJson)) {
+      if (userJson && userJson.length > 0) {
         const user = JSON.parse(userJson);
 
         yield put({
@@ -78,28 +71,24 @@ export default {
             permissions: {
               visit: user.Menus.map(item => item.id)
             },
-            menu: user.Menus,
-          },
+            menu: user.Menus
+          }
         })
         if (location.pathname === '/login') {
-          yield put(routerRedux.push({
-            pathname: '/dashboard',
-          }))
+          yield put(routerRedux.push({ pathname: '/dashboard' }))
         }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
-        window.localStorage.removeItem('loginUser')
+        window.sessionStorage.removeItem(loginKey)
         yield put(routerRedux.push({
           pathname: '/login',
           search: queryString.stringify({ from: locationPathname })
         }))
       }
     },
-    * logout ({
-      payload,
-    }, { call, put }) {
+    * logout ({ payload }, { call, put }) {
       const data = yield call(logout, { id: payload })
       if (data.success) {
-        window.localStorage.removeItem('loginUser')
+        window.sessionStorage.removeItem(loginKey)
         yield put({ type: 'updateState', payload: {
           user: {},
           permissions: { visit: [] },

@@ -1,26 +1,23 @@
 import { routerRedux } from 'dva/router'
-import { getLimitTime } from 'utils'
+import { config } from 'utils'
 import { login } from './service'
+
+const { loginKey } = config
 
 export default {
   namespace: 'login',
-
   state: {},
-
   effects: {
-    * login ({
-      payload
-    }, { put, call, select }) {
+    * login ({ payload }, { put, call, select }) {
       const data = yield call(login, payload)
       const { locationQuery } = yield select(_ => _.app)
       if (data.success && data.IsSuccess) {
         let { Data } = data;  
-        window.localStorage.setItem('loginUser', JSON.stringify({
+        window.sessionStorage.setItem(loginKey, JSON.stringify({
           Id: Data.UserId,
           Name: Data.UserName,
           Account: Data.Account,
-          Menus: Data.MenuList,
-          Limit: getLimitTime()
+          Menus: Data.MenuList
         }))
         const { from } = locationQuery
         yield put({ type: 'app/query' })

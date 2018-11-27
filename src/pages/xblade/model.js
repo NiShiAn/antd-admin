@@ -1,5 +1,4 @@
 import modelExtend from 'dva-model-extend'
-import { routerRedux } from 'dva/router'
 import { selectList, update } from './service'
 import { pageModel } from 'utils/model'
 

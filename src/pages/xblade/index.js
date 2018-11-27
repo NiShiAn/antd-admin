@@ -17,8 +17,7 @@ const Xblade = ({
   loading,
   form:{
     getFieldDecorator,
-    getFieldsValue,
-    setFieldsValue
+    getFieldsValue
   }
 }) => {
   const { query, pathname } = location
@@ -85,11 +84,9 @@ const Xblade = ({
   const mPros = {
     info: editBox,
     visible: editShow,
-    //confirmLoading: loading.effects['xblade/update'],
     maskClosable: false,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
-      console.log(data)
       dispatch({
         type: 'xblade/update',
         payload: data,
@@ -149,7 +146,7 @@ const Xblade = ({
 
   return (
     <Page inner>
-      <Row gutter={24}>
+      <Row gutter={12}>
         <Col span={4} style={{ marginBottom: 16}}>
           {getFieldDecorator('name', { initialValue: name })(<Search placeholder='名称' onSearch={runSearch} />)}
         </Col>
@@ -163,12 +160,8 @@ const Xblade = ({
             </Select>
           )}
         </Col>
-        <Col>
-          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-            <div>
-              <Button type='primary' onClick={runSearch}>查询</Button>
-            </div>
-          </div>
+        <Col span={16} style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          <Button icon="search" onClick={runSearch}>查询</Button>
         </Col>
       </Row>
       <Table 

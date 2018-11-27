@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { users } = api
+const { admin } = api
 
 export function query (params) {
   return request({
-    url: users,
+    url: admin.select,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,7 @@ export function query (params) {
 
 export function remove (params) {
   return request({
-    url: users + '/delete',
+    url: admin.select + '/delete',
     method: 'post',
     data: params,
   })

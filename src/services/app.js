@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { user, userLogout, userLogin } = api
+const { admin } = api
 
 export function login (params) {
   return request({
-    url: userLogin,
+    url: admin.login,
     method: 'post',
     data: params,
   })
@@ -13,7 +13,7 @@ export function login (params) {
 
 export function logout (params) {
   return request({
-    url: userLogout,
+    url: admin.logout,
     method: 'get',
     data: params,
   })

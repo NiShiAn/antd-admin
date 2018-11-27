@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { selectXblade, updateXblade } = api
+const { xblade } = api
 
 export function selectList (params) {
   return request({
-    url: selectXblade,
+    url: xblade.select,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,7 @@ export function selectList (params) {
 
 export function update(params){
   return request({
-    url: updateXblade,
+    url: xblade.update,
     method: 'get',
     data: params
   })

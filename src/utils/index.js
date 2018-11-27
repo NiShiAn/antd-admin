@@ -1,5 +1,6 @@
 /* global window */
 import cloneDeep from 'lodash.clonedeep'
+import config from './config'
 
 export classnames from 'classnames'
 export config from './config'
@@ -40,7 +41,6 @@ Date.prototype.format = function (format) {
   }
   return format
 }
-
 
 /**
  * @param  name {String}
@@ -98,22 +98,14 @@ export function arrayToTree (array, id = 'Id', pid = 'ParentId', children = 'Chi
   })
   return result
 }
-/**
- * 获取限制时间
- * @param   {int}     h
- * @return  {int}
- */
-export function getLimitTime(h = 3){
-  return (new Date()).getTime() + h*60*60*1000;
-}
-/**
- * 判断是否需要登录
- * @param   {string}  info
- * @return  {boolean}
- */
-export function isNeedLogin(info){
-  if(!info || info.length <= 0) 
-    return true
 
-  return JSON.parse(info).Limit < new Date().getTime()
+/**
+ * 获取当前登录用户
+ * @return  {Object}
+ */
+export function currentUser(){
+  var userJson = window.sessionStorage.getItem(config.loginKey)
+  if (userJson && userJson.length > 0) 
+    return JSON.parse(userJson)
+  return null
 }

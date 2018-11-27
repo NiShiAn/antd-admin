@@ -13,7 +13,7 @@ import styles from './index.less'
 
 const { api } = config
 const {
-  dashboard, users, userLogin, user, v1test, v2test,
+  dashboard, admin, user, v1test, v2test,
 } = api
 
 const requestOptions = [
@@ -26,16 +26,16 @@ const requestOptions = [
     desc: 'intercept request by mock.js',
   },
   {
-    url: userLogin,
+    url: admin.login,
     method: 'post',
     data: {
       username: 'guest',
-      password: 'guest',
+      password:Select
     },
     desc: 'intercept request by mock.js',
   },
   {
-    url: users,
+    url: admin.select,
     desc: 'intercept request by mock.js',
   },
   {

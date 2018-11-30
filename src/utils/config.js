@@ -20,10 +20,15 @@ module.exports = {
     admin: {
       login: `${head}/admin/login`,
       logout: `${head}/admin/logout`,
-      select: `${head}/admin/list`,
-      roles: `${head}/admin/role`,
-      update: `${head}/admin/update`,
-      insert: `${head}/admin/insert`
+      select: `${head}/admin/user/list`,
+      insert: `${head}/admin/user/insert`,
+      update: `${head}/admin/user/update`,
+      roles: `${head}/admin/user/roles`
+    },
+    menu: {
+      select: `${head}/admin/menu/list`,
+      insert: `${head}/admin/menu/insert`,
+      update: `${head}/admin/menu/update`,
     },
     xblade: {
       select: `${head}/xblade/list`,

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
 import { Page } from 'components'
-import { currentUser } from 'utils'
 import { Form, Row, Col, Input, Select, Button, Table, Divider, Popconfirm } from 'antd'
 import EditModal from './components/EditModal'
 
@@ -19,8 +18,8 @@ const Admin = ({
   }
 }) => {
   const { query, pathname } = location
-  const { roleAry, list, modalType, editShow, editBox, pagination } = admin
-  const curUser = currentUser() 
+  const { roleAry, list, modalType, editShow, editBox, pagination, curUser } = admin
+
   //#region 属性
   //表格
   const columns = [

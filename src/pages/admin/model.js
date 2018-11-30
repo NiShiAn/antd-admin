@@ -19,23 +19,39 @@ export default modelExtend(pageModel,{
           dispatch({ type: 'select', payload })
         }
       })
-    },
+    }
   },
   effects: {
     * select ({ payload }, { put, call }) {
       const data = yield call(select, payload)
       if (data.success && data.IsSuccess) {
         yield put({
-            type: 'querySuccess',
-            payload: {
-              list: data.Data.List,
-              pagination: {
-                current: Number(payload.page) || 1,
-                pageSize: Number(payload.pageSize) || 10,
-                total: data.Data.Total
-              },
-            },
+          type: 'querySuccess',
+          payload: {
+            list: data.Data.List,
+            pagination: {
+              current: Number(payload.page) || 1,
+              pageSize: Number(payload.pageSize) || 10,
+              total: data.Data.Total
+            }
+          }
         })
+      } else {
+        throw data
+      }
+    },
+    * insert ({ payload }, { put, call }){
+      const data = yield call(insert, payload)
+      if (data.success && data.IsSuccess) {
+        yield put({ type: 'hideModal' })
+      } else {
+        throw data
+      }
+    },
+    * update ({ payload }, { put, call }){
+      const data = yield call(update, payload)
+      if (data.success && data.IsSuccess) {
+        yield put({ type: 'hideModal' })
       } else {
         throw data
       }
@@ -52,22 +68,6 @@ export default modelExtend(pageModel,{
       } else {
         throw data
       }
-    },
-    * update ({ payload }, { put, call }){
-      const data = yield call(update, payload)
-      if (data.success && data.IsSuccess) {
-        yield put({ type: 'hideModal' })
-      } else {
-        throw data
-      }
-    },
-    * insert ({ payload }, { put, call }){
-      const data = yield call(insert, payload)
-      if (data.success && data.IsSuccess) {
-        yield put({ type: 'hideModal' })
-      } else {
-        throw data
-      }
     }
   },
   reducers: {
@@ -76,6 +76,6 @@ export default modelExtend(pageModel,{
     },
     hideModal(state){
       return { ...state, editShow: false }
-    },
+    }
   }
 })

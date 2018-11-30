@@ -1,4 +1,5 @@
 import modelExtend from 'dva-model-extend'
+import { currentUser } from './index'
 
 export const model = {
   reducers: {
@@ -12,8 +13,8 @@ export const model = {
 }
 
 export const pageModel = modelExtend(model, {
-
   state: {
+    curUser: currentUser(),
     list: [],
     pagination: {
       showQuickJumper: true,
@@ -22,7 +23,6 @@ export const pageModel = modelExtend(model, {
       pageSize: 10
     },
   },
-
   reducers: {
     querySuccess (state, { payload }) {
       const { list, pagination } = payload

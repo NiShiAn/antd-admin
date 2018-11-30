@@ -41,8 +41,11 @@ const editModal = ({
           <Form.Item label='账号' {...formItemLayout}>
             {getFieldDecorator('Account',{
               initialValue: '',
-              rules: [{ required: true, message: '必填' }]
-            })(<Input />)}
+              rules: [
+                { required: true, message: '必填' },
+                { pattern: new RegExp(/^\w+$/, "g"), message: '数字、字母或下划线' }
+              ]
+            })(<Input placeholder='数字、字母或下划线'/>)}
           </Form.Item>
         }
         <Form.Item label='昵称' {...formItemLayout}>

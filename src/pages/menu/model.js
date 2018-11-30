@@ -1,24 +1,19 @@
 import modelExtend from 'dva-model-extend'
-import { select, update } from './service'
+import { select, insert, update } from './service'
 import { pageModel } from 'utils/model'
 
 export default modelExtend(pageModel,{
-  namespace: 'xblade',
+  namespace: 'menu',
   state: {
     editShow: false,
-    editBox: {},
-    favesShow: false,
-    favesBox: {}
+    editBox: {}
   },
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/xblade') {
-          const payload = location.query || { name: '', page: 1, pageSize: 10 }
-          dispatch({
-            type: 'select',
-            payload,
-          })
+        if (location.pathname === '/menu') {
+          const payload = location.query || { page: 1, pageSize: 10 }
+          dispatch({ type: 'select', payload })
         }
       })
     }
@@ -42,6 +37,14 @@ export default modelExtend(pageModel,{
         throw data
       }
     },
+    * insert ({ payload }, { put, call }){
+      const data = yield call(insert, payload)
+      if (data.success && data.IsSuccess) {
+        yield put({ type: 'hideModal' })
+      } else {
+        throw data
+      }
+    },
     * update({ payload },{ call, put }){
       const data = yield call(update, payload)
       if (data.success && data.IsSuccess) {
@@ -57,12 +60,6 @@ export default modelExtend(pageModel,{
     },
     hideModal(state){
       return { ...state, editShow: false }
-    },
-    showFaves(state, { payload }){
-      return{ ...state, ...payload, favesShow: true }
-    },
-    hideFaves(state){
-      return { ...state, favesShow: false }
     }
   }
 })

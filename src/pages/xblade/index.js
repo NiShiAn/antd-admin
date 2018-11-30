@@ -70,7 +70,7 @@ const Xblade = ({
     render: (text) => {
       return text.map(n => (<a key={n.GoodsId} href='javascript:;' onClick={favesInfo.bind(this, n)} style={{ display: "block" }}>{n.Name}</a>))
     }
-  },{
+  }, {
     title: '操作',
     key: 'operation',
     className: 'operate',
@@ -78,7 +78,7 @@ const Xblade = ({
       if(record.Target != '' || record.Subs.length > 0)
         return (<a href='javascript:;' onClick={editInfo.bind(this, record)}>编辑</a>)
       return ''
-    },
+    }
   }]
   //弹窗
   const mPros = {

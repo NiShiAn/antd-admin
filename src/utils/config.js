@@ -1,7 +1,7 @@
 const APIV1 = '/api/v1'
 const APIV2 = '/api/v2'
-const head = 'http://localhost:58043/fr'
-//const head = 'http://47.94.160.77:8034/fr'
+//const head = 'http://localhost:58043/fr'
+const head = 'http://47.94.160.77:8034/fr'
 
 module.exports = {
   name: 'AntD Admin',

@@ -5,6 +5,7 @@ import { pageModel } from 'utils/model'
 export default modelExtend(pageModel,{
   namespace: 'menu',
   state: {
+    modalType: 'add',
     editShow: false,
     editBox: {}
   },
@@ -45,7 +46,7 @@ export default modelExtend(pageModel,{
         throw data
       }
     },
-    * update({ payload },{ call, put }){
+    * update ({ payload },{ call, put }){
       const data = yield call(update, payload)
       if (data.success && data.IsSuccess) {
         yield put({ type: 'hideModal' })

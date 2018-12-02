@@ -9,6 +9,7 @@
     height: 30px;
     line-height: 30px;
     font-size: 16px;
+    cursor: default;
   }
   .ant-tree li span.ant-tree-switcher, 
   .ant-tree li span.ant-tree-iconEle {
@@ -19,7 +20,9 @@
   .ant-tree.ant-tree-directory .ant-tree-child-tree > li span.ant-tree-node-content-wrapper:before {
     height: 30px;
   }
-
+  .ant-tree li .ant-tree-node-content-wrapper:hover div.menuTitle i {
+    display: inline-block;
+  }
   .menuBox {
     width: 450px;
     min-height: 600px;
@@ -27,13 +30,19 @@
   }
 
   .menuTitle {
-    display: inline-block;
+    display: inline-flex;
+    justify-content: space-between;
 
     &.level1 {
       width: 370px;
     }
     &.level2 {
       width: 350px;
+    }
+    i {
+      display: none;
+      cursor: pointer;
+      padding: 0 3px;
     }
   }
 }

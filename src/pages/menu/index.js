@@ -5,6 +5,7 @@ import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
 import { Page } from 'components'
 import { Form, Row, Col, Input, Select, Button, Tree, Divider, Popconfirm, Icon } from 'antd'
+import EditModal from './components/EditModal'
 import styles from './less/index.less'
 
 const DirectoryTree = Tree.DirectoryTree;
@@ -21,9 +22,30 @@ const Menu = ({
   }
 }) => {
   const { query, pathname } = location
-  const { list, editShow, editBox, pagination, curUser } = menu
+  const { list, modalType, editShow, editBox, pagination, curUser } = menu
 
   //#region 属性
+  //弹窗
+  const mPros = {
+    info: editBox,
+    curUser: curUser,
+    type: modalType,
+    visible: editShow,
+    width: 400,
+    maskClosable: false,
+    wrapClassName: 'vertical-center-modal',
+    onOk(data) {
+      dispatch({
+        type: modalType == 'add' ? 'menu/insert' : 'menu/update',
+        payload: data,
+      }).then(() => {
+        runSearch()
+      })
+    },
+    onCancel() {
+      dispatch({ type: 'menu/hideModal' })
+    }
+  }
 
   //#endregion
 
@@ -42,6 +64,48 @@ const Menu = ({
   }
   const runSearch = () => pagination.onChange()
 
+  //新增
+  const addMenu = (info, e) => {
+    e.stopPropagation();
+    dispatch({ 
+      type: 'menu/showModal',
+      payload:{
+        modalType: 'add',
+        editBox: info
+      }
+    })
+  }
+  //编辑
+  const editMenu = (info, e) => {
+    e.stopPropagation();
+    dispatch({ 
+      type: 'menu/showModal',
+      payload:{
+        modalType: 'edit',
+        editBox: info
+      }
+    })
+  }
+  //删除
+  const delMenu = (item, e) => {
+    e.stopPropagation();
+    dispatch({
+      type: 'menu/update',
+      payload: {
+        json: JSON.stringify({
+          Idx: item.Idx,
+          Name: item.Name,
+          Icon: item.Icon,
+          Route: item.Route,
+          IsActive: false,
+          UpdateBy: curUser.Account
+        })
+      }
+    }).then(() => {
+      runSearch()
+    })
+  }
+
   //Tree数据
   const buildTree = (data) => {
     return data.map(item => {
@@ -50,8 +114,17 @@ const Menu = ({
           title={
             <div className={`menuTitle level${item.Level}`} >
               <span>{item.Name}</span>
-              <Icon type='edit' />
-              <Icon type='delete' />
+              <span>
+                { item.Idx != 1 && item.Level == 1 &&
+                  <Icon type='diff' title='添加' onClick={addMenu.bind(this, item)}/>
+                }
+                <Icon type='edit' title='编辑' onClick={editMenu.bind(this, item)} />
+                { item.Idx != 1 && (!item.ChildList || item.ChildList.length == 0) &&
+                  <Popconfirm title="确定删除么?" placement="right" onConfirm={delMenu.bind(this, item)}>
+                    <Icon type='delete' title='删除'/>
+                  </Popconfirm>
+                }
+              </span>
             </div>
           } 
           key={item.Key} 
@@ -75,7 +148,7 @@ const Menu = ({
         </Col>
         <Col span={20} style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <Button icon="search" onClick={runSearch}>查询</Button>
-          <Button type='primary'>新增</Button>
+          <Button type='primary' onClick={addMenu.bind(this, { Level: 0 })}>新增</Button>
         </Col>
       </Row>
       <Row>
@@ -86,6 +159,7 @@ const Menu = ({
         </Col>
         {/* <Col className={styles.menuBox}></Col> */}
       </Row>
+      { editShow && <EditModal {...mPros}/> }
     </Page>
   )
 }

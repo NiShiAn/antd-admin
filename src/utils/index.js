@@ -100,6 +100,23 @@ export function arrayToTree (array, id = 'Id', pid = 'ParentId', children = 'Chi
 }
 
 /**
+ * 数组移动
+ * @param {Array} arr 
+ * @param {Int} old_index 
+ * @param {Int} new_index 
+ */
+export function arrayMove(arr, old_index, new_index) {
+  if (new_index >= arr.length) {
+      var k = new_index - arr.length + 1
+      while (k--) {
+          arr.push(undefined)
+      }
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0])
+  return arr
+}
+
+/**
  * 获取当前登录用户
  * @return  {Object}
  */

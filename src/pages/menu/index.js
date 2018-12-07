@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
 import { Page } from 'components'
+import { arrayMove } from 'utils'
 import { Form, Row, Col, Input, Select, Button, Tree, Divider, Popconfirm, Icon } from 'antd'
 import EditModal from './components/EditModal'
 import styles from './less/index.less'
@@ -116,7 +117,7 @@ const Menu = ({
               <span>{item.Name}</span>
               <span>
                 { item.Idx != 1 && item.Level == 1 &&
-                  <Icon type='diff' title='添加' onClick={addMenu.bind(this, item)}/>
+                  <Icon type='plus' title='添加' onClick={addMenu.bind(this, item)}/>
                 }
                 <Icon type='edit' title='编辑' onClick={editMenu.bind(this, item)} />
                 { item.Idx != 1 && (!item.ChildList || item.ChildList.length == 0) &&
@@ -138,27 +139,78 @@ const Menu = ({
       )
     });
   }
+  //Tree排序
+  const sortMenu = (info) => {
+    //当前
+    let curInfo = info.dragNode.props.dataRef
+    //目标
+    let tarInfo = info.node.props.dataRef
+    //判断
+    if(curInfo.ParentId != tarInfo.ParentId || !info.dropToGap) return
+    
+    let data = curInfo.Level == 1
+      ? list 
+      : list.find(n => n.Idx == curInfo.ParentId).ChildList
+    //置换的Index
+    let curIndex = data.findIndex(n => n == curInfo)
+    let tarIndex = data.findIndex(n => n == tarInfo)
+    tarIndex += info.dropPosition >= 0 ? 0 : -1
+    tarIndex = tarIndex < 0 ? 0 : tarIndex
+
+    //重排数组
+    data = arrayMove(data, curIndex, tarIndex)
+    //重排Key
+    let keys = curInfo.Key.split('-')
+    let ids = []
+    for(let i = 0; i < data.length; i++) {
+      data[i].Key = `${keys[0]}${(curInfo.Level == 1 ? '' : `-${keys[1]}`)}-${i + 1}`
+      ids.push(data[i].Idx)
+    }
+
+    //返值
+    if(curInfo.Level == 2)
+      list.find(n => n.Idx == curInfo.ParentId).ChildList = data
+
+    dispatch({ type: 'menu/sort', payload: {list: list, ids: ids} })
+  }
   //#endregion
 
   return (
     <Page inner>
-      <Row gutter={12} style={{ marginBottom: 16 }}>
-        <Col span={4}>
-          {getFieldDecorator('name', { initialValue: name })(<Input.Search placeholder='名称' />)}
-        </Col>
-        <Col span={20} style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-          <Button icon="search" onClick={runSearch}>查询</Button>
-          <Button type='primary' onClick={addMenu.bind(this, { Level: 0 })}>新增</Button>
-        </Col>
-      </Row>
-      <Row>
-        <Col className='menuBox'>
-          <DirectoryTree defaultExpandAll={true}>
-            { buildTree(list) }
-          </DirectoryTree>
-        </Col>
-        {/* <Col className={styles.menuBox}></Col> */}
-      </Row>
+      <div style={{ display: 'flex', justifyContent: 'start', flexWrap: 'wrap' }}>
+        <div style={{ width: '450px' }}>
+          <Row gutter={12} style={{ marginBottom: 16 }}>
+            <Col span={14}>
+              {getFieldDecorator('name', { initialValue: name })(<Input.Search placeholder='名称' />)}
+            </Col>
+            <Col span={10} style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+              <Button icon="search" onClick={runSearch}>查询</Button>
+              <Button type='primary' onClick={addMenu.bind(this, { Level: 0 })}>新增</Button>
+            </Col>
+          </Row>
+          <Row className='menuBox'>
+            <Tree defaultExpandAll onDrop={sortMenu} draggable>
+              { buildTree(list) }
+            </Tree>
+          </Row>
+        </div>
+        <div style={{ width: '450px', marginLeft: '20px' }}>
+          <Row gutter={12} style={{ marginBottom: 16 }}>
+            <Col span={14}>
+              {getFieldDecorator('name', { initialValue: name })(<Input.Search placeholder='名称' />)}
+            </Col>
+            <Col span={10} style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+              <Button icon="search" onClick={runSearch}>查询</Button>
+              <Button type='primary' onClick={addMenu.bind(this, { Level: 0 })}>新增</Button>
+            </Col>
+          </Row>
+          <Row className='menuBox'>
+            <Tree defaultExpandAll onDrop={sortMenu} draggable>
+              { buildTree(list) }
+            </Tree>
+          </Row>
+        </div>
+      </div>
       { editShow && <EditModal {...mPros}/> }
     </Page>
   )

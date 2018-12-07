@@ -26,3 +26,11 @@ export function update(params) {
     data: params
   })
 }
+
+export function sort(params) {
+  return request({
+    url: menu.sort,
+    method: 'get',
+    data: params
+  })
+}

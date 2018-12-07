@@ -1,5 +1,5 @@
 import modelExtend from 'dva-model-extend'
-import { select, insert, update } from './service'
+import { select, insert, update, sort } from './service'
 import { pageModel } from 'utils/model'
 
 export default modelExtend(pageModel,{
@@ -53,6 +53,10 @@ export default modelExtend(pageModel,{
       } else {
         throw data
       }
+    },
+    * sort ({ payload },{ call, put }){
+      yield put({ type: 'updateState', payload: { list: payload.list } })
+      yield call(sort, { sorts: payload.ids.join('@') })
     }
   },
   reducers: {

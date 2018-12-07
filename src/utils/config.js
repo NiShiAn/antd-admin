@@ -29,6 +29,7 @@ module.exports = {
       select: `${head}/admin/menu/list`,
       insert: `${head}/admin/menu/insert`,
       update: `${head}/admin/menu/update`,
+      sort: `${head}/admin/menu/sort`
     },
     xblade: {
       select: `${head}/xblade/list`,

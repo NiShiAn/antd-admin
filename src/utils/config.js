@@ -31,6 +31,12 @@ module.exports = {
       update: `${head}/admin/menu/update`,
       sort: `${head}/admin/menu/sort`
     },
+    role: {
+      select: `${head}/admin/role/list`,
+      insert: `${head}/admin/role/insert`,
+      update: `${head}/admin/role/update`,
+      menu: `${head}/admin/role/menu`,
+    },
     xblade: {
       select: `${head}/xblade/list`,
       update: `${head}/xblade/update`

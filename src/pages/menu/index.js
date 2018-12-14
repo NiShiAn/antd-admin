@@ -5,11 +5,11 @@ import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
 import { Page } from 'components'
 import { arrayMove } from 'utils'
-import { Form, Row, Col, Input, Select, Button, Tree, Divider, Popconfirm, Icon } from 'antd'
+import { Form, Row, Col, Input, Button, Tree, Popconfirm, Icon } from 'antd'
 import EditModal from './components/EditModal'
+import Role from '../role'
 import styles from './less/index.less'
 
-const DirectoryTree = Tree.DirectoryTree;
 const TreeNode = Tree.TreeNode;
 
 const Menu = ({
@@ -23,7 +23,7 @@ const Menu = ({
   }
 }) => {
   const { query, pathname } = location
-  const { list, modalType, editShow, editBox, pagination, curUser } = menu
+  const { list, modalType, editShow, editBox, curUser } = menu
 
   //#region 属性
   //弹窗
@@ -52,18 +52,16 @@ const Menu = ({
 
   //#region function
   //检索
-  pagination.onChange = (page) => {
+  const runSearch = () => {
     let fields = getFieldsValue()
     dispatch(routerRedux.push({
       pathname,
       search: queryString.stringify({
         ...query,
-        ...fields,
-        page: page
+        ...fields
       })
     }))
   }
-  const runSearch = () => pagination.onChange()
 
   //新增
   const addMenu = (info, e) => {
@@ -167,10 +165,6 @@ const Menu = ({
       ids.push(data[i].Idx)
     }
 
-    //返值
-    if(curInfo.Level == 2)
-      list.find(n => n.Idx == curInfo.ParentId).ChildList = data
-
     dispatch({ type: 'menu/sort', payload: {list: list, ids: ids} })
   }
   //#endregion
@@ -181,7 +175,7 @@ const Menu = ({
         <div style={{ width: '450px' }}>
           <Row gutter={12} style={{ marginBottom: 16 }}>
             <Col span={14}>
-              {getFieldDecorator('name', { initialValue: name })(<Input.Search placeholder='名称' />)}
+              {getFieldDecorator('name', { initialValue: name })(<Input placeholder='导航名称' />)}
             </Col>
             <Col span={10} style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Button icon="search" onClick={runSearch}>查询</Button>
@@ -194,22 +188,7 @@ const Menu = ({
             </Tree>
           </Row>
         </div>
-        <div style={{ width: '450px', marginLeft: '20px' }}>
-          <Row gutter={12} style={{ marginBottom: 16 }}>
-            <Col span={14}>
-              {getFieldDecorator('name', { initialValue: name })(<Input.Search placeholder='名称' />)}
-            </Col>
-            <Col span={10} style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <Button icon="search" onClick={runSearch}>查询</Button>
-              <Button type='primary' onClick={addMenu.bind(this, { Level: 0 })}>新增</Button>
-            </Col>
-          </Row>
-          <Row className='menuBox'>
-            <Tree defaultExpandAll onDrop={sortMenu} draggable>
-              { buildTree(list) }
-            </Tree>
-          </Row>
-        </div>
+        <Role menus={list}/>
       </div>
       { editShow && <EditModal {...mPros}/> }
     </Page>

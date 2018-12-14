@@ -155,7 +155,7 @@ const Admin = ({
         <Col span={4}>
           {getFieldDecorator('roleId')(
             <Select placeholder='请选择' style={{ width: '100%' }}>
-              { roleAry.map(n => (<Select.Option value={n.Idx} key={n.Idx}>{n.Name}</Select.Option>)) }
+              { roleAry && roleAry.map(n => (<Select.Option value={n.Idx} key={n.Idx}>{n.Name}</Select.Option>)) }
             </Select>
           )}
         </Col>

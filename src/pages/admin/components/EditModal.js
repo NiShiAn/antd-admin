@@ -60,7 +60,7 @@ const editModal = ({
             rules: [{ required: true, message: '必填' }]
           })(
             <Select placeholder='请选择' style={{ width: '100%' }}>
-              { roleAry.map(n => (<Select.Option value={n.Idx} key={n.Idx}>{n.Name}</Select.Option>)) }
+              { roleAry && roleAry.map(n => (<Select.Option value={n.Idx} key={n.Idx}>{n.Name}</Select.Option>)) }
             </Select>)}
         </Form.Item>
       </Form>

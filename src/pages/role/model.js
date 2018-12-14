@@ -1,22 +1,21 @@
 import modelExtend from 'dva-model-extend'
-import { select, insert, update, sort } from './service'
+import { select, insert, update, menu } from './service'
 import { pageModel } from 'utils/model'
 
 export default modelExtend(pageModel,{
-  namespace: 'menu',
+  namespace: 'role',
   state: {
+    roles: [],
     modalType: 'add',
     editShow: false,
-    editBox: {}
+    editBox: {},
+    purviewShow: false,
+    roleMenus: [],
+    checkedKey: []
   },
   subscriptions: {
-    setup ({ dispatch, history }) {
-      history.listen((location) => {
-        if (location.pathname === '/menu') {
-          const payload = location.query || {}
-          dispatch({ type: 'select', payload })
-        }
-      })
+    setup ({ dispatch }) {
+      dispatch({ type: 'select', payload: {} })
     }
   },
   effects: {
@@ -24,9 +23,9 @@ export default modelExtend(pageModel,{
       const data = yield call(select, payload)
       if (data.success && data.IsSuccess) {
         yield put({
-          type: 'querySuccess',
+          type: 'updateState',
           payload: {
-            list: data.Data
+            roles: data.Data
           }
         })
       } else {
@@ -49,9 +48,14 @@ export default modelExtend(pageModel,{
         throw data
       }
     },
-    * sort ({ payload },{ call, put }){
-      yield put({ type: 'updateState', payload: { list: payload.list } })
-      yield call(sort, { sorts: payload.ids.join('@') })
+    * menu ({ payload },{ call, put }){
+      const data = yield call(menu, payload)
+      if (data.success && data.IsSuccess) {
+        yield put({ type: 'hidePurview' })
+      } else {
+        throw data
+      }
+
     }
   },
   reducers: {
@@ -60,6 +64,12 @@ export default modelExtend(pageModel,{
     },
     hideModal(state){
       return { ...state, editShow: false }
+    },
+    showPurview(state, { payload }){
+      return { ...state, ...payload, purviewShow: true }
+    },
+    hidePurview(state){
+      return { ...state, purviewShow: false }
     }
   }
 })

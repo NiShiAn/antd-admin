@@ -10,6 +10,7 @@ export default modelExtend(pageModel,{
     editShow: false,
     editBox: {},
     purviewShow: false,
+    curRoleId: 0,
     roleMenus: [],
     checkedKey: []
   },

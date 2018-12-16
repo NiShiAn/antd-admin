@@ -5,23 +5,15 @@ import { Modal, Row, Tree } from 'antd'
 const editModal = ({
   ...mPros
 }) => {
-  const { roleMenus, checkedKey, curUser, onOk } = mPros
+  const { roleId, roleMenus, checkedKey, curUser, onOk } = mPros
+  const cMenu = []
 
   mPros.onOk = () => {
-    validateFields((errors) => {
-      if (errors) return
-      let data = getFieldsValue()
-
-      onOk({
-        json: JSON.stringify({
-          Idx: info.Idx,
-          Account: data.Account || '',
-          UserName: data.UserName,
-          RoleId: data.RoleId,
-          IsActive: true,
-          CreateBy: curUser.Account,
-          UpdateBy: curUser.Account
-        })
+    onOk({
+      json: JSON.stringify({
+        RoleId: roleId,
+        UpdateBy: curUser.Account,
+        MenuList: purviews
       })
     })
   }
@@ -46,15 +38,17 @@ const editModal = ({
     });
   }
   //选则Tree
-  const checkMenu = (selectedKeys, info) => {
-    var checkeds = info.checkedNodes.map(n => n.props.dataRef);
+  const onCheck = (checkedKeys, info) => {
+    //console.log('onCheck', checkedKeys);
+    var checkeds =  [...checkedKeys, ...info.halfCheckedKeys];
+    
     debugger
   }
   
   return (
     <Modal {...mPros}>
       <Row className='menuBox purview'>
-        <Tree checkable defaultExpandAll onCheck={checkMenu} checkedKeys={checkedKey}>
+        <Tree checkable defaultExpandAll onCheck={onCheck} defaultCheckedKeys={checkedKey}>
           {buildTree(roleMenus)}
         </Tree>
       </Row>

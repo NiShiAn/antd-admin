@@ -14,7 +14,7 @@ const Role = ({
     getFieldsValue
   }
 }) => {
-  const { roles, modalType, editShow, editBox, purviewShow, roleMenus, checkedKey, curUser } = role
+  const { roles, modalType, editShow, editBox, purviewShow, curRoleId, roleMenus, checkedKey, curUser } = role
 
   //#region 属性
   //编辑
@@ -40,6 +40,7 @@ const Role = ({
   }
   //权限
   const pPros = {
+    roleId: curRoleId,
     roleMenus: roleMenus,
     checkedKey: checkedKey,
     curUser: curUser,
@@ -99,11 +100,18 @@ const Role = ({
       runSearch()
     })
   }
+  //重排序
   const sortMenu = (data, purview, checkAry) => {
     data.map(item => {
       let cur = purview.find(n => n.MenuId == item.Idx)
-      item.Sort = cur ? cur.Sort : 150
-      cur && checkAry.push(item.Key)
+      if(cur) {
+        item.Sort = cur.Sort
+        item.Checked = true
+        checkAry.push(item.Key)
+      } else {
+        item.Sort = 150
+        item.Checked = false
+      }
       item.ChildList && sortMenu(item.ChildList, purview, checkAry)
     });
   }
@@ -115,6 +123,7 @@ const Role = ({
     dispatch({ 
       type: 'role/showPurview',
       payload:{
+        curRoleId: item.RoleId,
         roleMenus: menuAry,
         checkedKey: checkAry
       }

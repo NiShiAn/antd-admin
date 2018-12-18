@@ -50,10 +50,21 @@ const Role = ({
     maskClosable: false,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
-      
+      dispatch({
+        type: 'role/menu',
+        payload: data,
+      }).then(() => {
+        runSearch()
+      })
     },
     onCancel() {
       dispatch({ type: 'role/hidePurview' })
+    },
+    dispatch(type, payload){
+      dispatch({
+        type: type,
+        payload: payload
+      })
     }
   }
   //#endregion
@@ -100,30 +111,34 @@ const Role = ({
       runSearch()
     })
   }
-  //重排序
-  const sortMenu = (data, purview, checkAry) => {
-    data.map(item => {
-      let cur = purview.find(n => n.MenuId == item.Idx)
-      if(cur) {
-        item.Sort = cur.Sort
-        item.Checked = true
-        checkAry.push(item.Key)
-      } else {
-        item.Sort = 150
-        item.Checked = false
-      }
-      item.ChildList && sortMenu(item.ChildList, purview, checkAry)
-    });
-  }
   //修改权限
   const editPurview = (item) => {
+    let sortMenu = (data, purview, checkAry) => {
+      data.map(item => {
+        let cur = purview.find(n => n.MenuId == item.Idx)
+        item.Sort = cur ? cur.Sort : 150
+        item.Checked = cur ? true : false
+        item.HalfChecked = false
+  
+        if(item.ChildList && item.ChildList.length > 0) {
+          sortMenu(item.ChildList, purview, checkAry)
+          if(item.ChildList.findIndex(n => !n.Checked) > -1){
+            item.HalfChecked = true
+            item.Checked = false
+          }
+        }
+  
+        item.Checked && checkAry.push(item.Key)
+      });
+    }
     let menuAry = menus.concat(), 
         checkAry = []
     sortMenu(menuAry, item.MenuList, checkAry)
+
     dispatch({ 
       type: 'role/showPurview',
       payload:{
-        curRoleId: item.RoleId,
+        curRoleId: item.Idx,
         roleMenus: menuAry,
         checkedKey: checkAry
       }

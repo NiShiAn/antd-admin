@@ -161,7 +161,7 @@ const Menu = ({
     let keys = curInfo.Key.split('-')
     let ids = []
     for(let i = 0; i < data.length; i++) {
-      data[i].Key = `${keys[0]}${(curInfo.Level == 1 ? '' : `-${keys[1]}`)}-${i + 1}`
+      data[i].Key = `${keys[0]}${(curInfo.Level == 1 ? '' : `-${keys[1]}`)}-${i}`
       ids.push(data[i].Idx)
     }
 

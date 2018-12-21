@@ -1,0 +1,199 @@
+.main {
+  width: 600px;   
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+
+  //实心六边形
+  .sixEdge_solid{   
+    width:160px;
+    height:100px;
+    position: absolute;
+    background:#6c6;
+
+    &::before{
+      content: "";
+      width: 0;
+      border-bottom: 40px solid #6c6;
+      border-left: 80px solid transparent;
+      border-right: 80px solid transparent;
+      position: absolute;
+      left: 0;
+      bottom: 100px;
+    }
+  
+    &::after{
+      content: "";
+      width: 0;
+      border-top: 40px solid #6c6;
+      border-left: 80px solid transparent;
+      border-right: 80px solid transparent;
+      position: absolute;
+      left: 0;
+      top: 100px;
+    }
+  }
+
+  //空心六边形
+  .sixEdge_hollow {
+    width: 173.2px;
+    height: 100px;
+    position: relative;
+    border-left: 2px solid #6c6;
+    border-right: 2px solid #6c6;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 35px;
+      bottom: 56px;
+      width: 100px;
+      height: 86.6px;
+      border-top: 2px solid #6c6;
+      border-right: 2px solid #6c6;
+      transform: rotate(-30deg) skewX(30deg);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 35px;
+      top: 56px;
+      width: 100px;
+      height: 86.6px;
+      border-top: 2px solid #6c6;
+      border-right: 2px solid #6c6;
+      transform: rotate(150deg) skewX(30deg);
+    }
+  }
+
+  //组合六边形
+  .sixEdge_comb {
+    width: 173.2px;
+    height: 100px;
+    position: relative;
+    margin: 200px auto;
+    color: #000;
+    .item {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      position: absolute;
+      overflow: hidden;
+
+      &.center {
+        border-left: 10px solid #000;
+        border-right: 10px solid #000;
+        font-size: 70px;
+        line-height: 92px;
+        text-align: center;
+      }
+      &.left {
+        border-left: 10px solid #000;
+        border-right: 10px solid #000;
+        transform: rotate(-60deg);
+      }
+      &.right {
+        border-left: 10px solid #000;
+        border-right: 10px solid #000;
+        transform: rotate(60deg);
+      }
+    }
+    .point {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 45px;
+      border-width: 0;
+      position: absolute;
+
+      &.top {
+        left: 82.09px;
+        top: -48px;
+        &::before{
+          content: '';
+          width: 8px;
+          height: 8px;
+          background: #fff;
+          border-radius: 45px;
+          border-width: 0;
+          position: absolute;
+          left: -81.6px;
+          top: 48px;
+        }
+        &::after{
+          content: '';
+          width: 8px;
+          height: 8px;
+          background: #fff;
+          border-radius: 45px;
+          border-width: 0;
+          position: absolute;
+          right: -81.6px;
+          top: 48px;
+        }
+      }
+      &.btm {
+        left: 82.09px;
+        bottom: -48px;
+        &::before{
+          content: '';
+          width: 8px;
+          height: 8px;
+          background: #fff;
+          border-radius: 45px;
+          border-width: 0;
+          position: absolute;
+          left: -81.6px;
+          bottom: 48px;
+        }
+        &::after{
+          content: '';
+          width: 8px;
+          height: 8px;
+          background: #fff;
+          border-radius: 45px;
+          border-width: 0;
+          position: absolute;
+          right: -81.6px;
+          bottom: 48px;
+        }
+      }
+    }
+
+    .text {
+      height: 50px;
+      position: absolute;
+      line-height: 42px;
+      font-size: 30px;
+
+      &.topLeft {
+        top: -25px;
+        left: -100px;
+      }
+      &.top {
+        top: -104px;
+        left: 40.6px;
+      }
+      &.topRight {
+        top: -25px;
+        right: -100px;
+      }
+      &.btmLeft {
+        bottom: -25px;
+        left: -100px;
+      }
+      &.btm {
+        bottom: -104px;
+        left: 40.6px;
+      }
+      &.btmRight {
+        bottom: -25px;
+        right: -130px;
+      }
+    }
+  }
+}

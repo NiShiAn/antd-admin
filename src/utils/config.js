@@ -41,6 +41,11 @@ module.exports = {
       select: `${head}/xblade/list`,
       update: `${head}/xblade/update`
     },
+    deadCells: {
+      monster: {
+        select: `${head}/deadcells/monster/list`
+      }
+    },
     posts: `${APIV1}/posts`,
     user: `${APIV1}/user/:id`,
     dashboard: `${APIV1}/dashboard`,

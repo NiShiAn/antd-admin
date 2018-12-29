@@ -8,7 +8,7 @@ import { arrayMove } from 'utils'
 import { Form, Row, Col, Input, Button, Tree, Popconfirm, Icon } from 'antd'
 import EditModal from './components/EditModal'
 import Role from '../role'
-import styles from './less/index.less'
+import './less/index.less'
 
 const TreeNode = Tree.TreeNode;
 

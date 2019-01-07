@@ -5,13 +5,22 @@ import { pageModel } from 'utils/model'
 export default modelExtend(pageModel,{
   namespace: 'deadCells_Monster',
   state: {
+    indext: 1,
+    totals: 0,
+    inLoad: false,
+    hasMore: true,
   },
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/deadcells/monster') {
-          const payload = location.query || {}
-          dispatch({ type: 'select', payload })
+          dispatch({ 
+            type: 'select', 
+            payload: {
+              page: 1, 
+              pageSize: 5
+            }
+          })
         }
       })
     }
@@ -21,9 +30,11 @@ export default modelExtend(pageModel,{
       const data = yield call(select, payload)
       if (data.success && data.IsSuccess) {
         yield put({
-          type: 'querySuccess',
+          type: 'initList',
           payload: {
-            list: data.Data
+            page: payload.page,
+            list: data.Data.List,
+            total: data.Data.Total
           }
         })
       } else {
@@ -32,6 +43,14 @@ export default modelExtend(pageModel,{
     }
   },
   reducers: {
-
+    initList(state, { payload }){
+      return { 
+        ...state,
+        inLoad: false,
+        indext: payload.page,
+        list: state.list.concat(payload.list),
+        totals: payload.total
+      }
+    },
   }
 })

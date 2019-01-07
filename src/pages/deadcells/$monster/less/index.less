@@ -1,19 +1,25 @@
 :global {
   .ant-list {
-    max-width: 500px;
+    max-width: 30rem;
     margin: 0 auto;
+    padding: 0 1em;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
   }
   .ant-list-vertical .ant-list-item-extra-wrap {
     flex-flow: row-reverse;
   }
   .ant-list-vertical .ant-list-item-extra {
-    margin-right: 30px;
+    margin-right: 2rem;
     margin-left: 0;
     display: flex;
     align-items: center;
   }
-  ul {
-    padding-inline-start: 20px;
-    list-style-type: square;
+  .ant-list-vertical .ant-list-item-content div {
+    padding-inline-start: 1rem;
+  }
+  .infinite {
+    height: calc(~'100vh - 246px');
+    overflow: auto;
   }
 }
